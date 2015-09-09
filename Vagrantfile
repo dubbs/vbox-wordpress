@@ -52,16 +52,29 @@ Vagrant.configure(2) do |config|
     # PHP
     rpm -qa|grep php > /dev/null
     if [ $? -ne 0 ];then
-      yum -y install php56w php56w-mysql php56w-fpm
+      yum -y install php56w php56w-mysql
       # fix security risk
       sed -i 's%^;cgi.fix_pathinfo=1%cgi.fix_pathinfo=0%' /etc/php.ini
       # update timezone
       sed -i 's%^;date.timezone =%date.timezone = "America/Regina"%' /etc/php.ini
-      chkconfig --levels 345 php-fpm on
-      service php-fpm start
     fi
 
-    # WEB
+    # PHP-FPM
+    rpm -qa|grep fpm > /dev/null
+    if [ $? -ne 0 ];then
+      yum -y install php56w-fpm
+      chkconfig --levels 345 php-fpm on
+      sed -i 's%listen = 127.0.0.1:9000%listen = /var/run/php5-fpm.sock%' /etc/php-fpm.d/www.conf
+      sed -i 's%user = apache%user = vagrant%' /etc/php-fpm.d/www.conf
+      sed -i 's%group = apache%group = vagrant%' /etc/php-fpm.d/www.conf
+      sed -i 's%;listen.owner = nobody%listen.owner = vagrant%' /etc/php-fpm.d/www.conf
+      sed -i 's%;listen.group = nobody%listen.group = vagrant%' /etc/php-fpm.d/www.conf
+      sed -i 's%;listen.mode%listen.mode%' /etc/php-fpm.d/www.conf
+      service php-fpm restart
+      service nginx restart
+    fi
+
+    # http://192.168.33.10/wp-admin/
 
   SHELL
 end
