@@ -74,6 +74,9 @@ Vagrant.configure(2) do |config|
       service nginx restart
     fi
 
+    # https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-12-04
+    # http://www.rackspace.com/knowledge_center/article/installing-nginx-and-php-fpm-setup-for-nginx
+    # https://danielmiessler.com/blog/ultimate-speed-wordpress-nginx/
     # http://192.168.33.10/wp-admin/
 
   SHELL
