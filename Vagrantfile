@@ -9,12 +9,13 @@ Vagrant.configure(2) do |config|
     #ln -s /usr/share/zoneinfo/America/Regina /etc/localtime
     #sed -i 's%New_York%Regina%' /etc/sysconfig/clock
     # put selinux into permissive mode
+    # setenforce 0
     #sed -i 's%SELINUX=enforcing%SELINUX=permissive%' /etc/selinux/config
 
     rpm -qa|grep nginx > /dev/null
     if [ $? -ne 0 ];then
       yum -y install nginx
-      chkconfig --levels 345 nginx on
+      chkconfig --levels 2345 nginx on
       # remove default servers
       CONFD=/etc/nginx/conf.d
       mv $CONFD/default.conf $CONFD/default.conf.bak
